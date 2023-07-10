@@ -1,5 +1,29 @@
 ## Docker
 
+Lets say you have created an application and its working fine in your machine.
+
+But in production it doesn't work. Why? Developers experience it a lot
+
+![](images/docker-1.png)
+
+The reason could be due to :
+
+- Dependencies
+- Libraries and Versions
+- OS Level features
+
+that the developer machine has but the production machine doesn't.
+
+We need a standard way to package the application and its dependencies so that it can run on any machine.
+
+`Docker` is a tool designed to make it easier to create, deploy, and run applications by using containers. Docker packages an application and its dependencies together in the form of a container, which ensures that the application works seamlessly in any environment.
+
+`Docker Host` The machine on which Docker is installed. It can be a physical machine or a virtual machine.
+
+`Docker Resgistry` is a place where we can store our docker images. Docker Hub is a public registry that anyone can use, and Docker is configured to look for images on Docker Hub by default. You can also use a private registry, such as `Amazon Elastic Container Registry (ECR)`, to store your images.
+
+![](images/docker-2.png)
+
 ### Dockerfile
 
 ```Dockerfile
@@ -439,6 +463,8 @@ The `ldconfig` command updates the dynamic linker/loader cache, which is respons
 ### Docker vs Virtual Machines
 
 Docker containers are often compared to virtual machines (VMs), but they are actually quite different. A virtual machine is a virtualized operating system that runs on top of a physical hardware. A Docker container is a virtualized runtime environment that runs on top of an operating system. This means that Docker containers are much more lightweight than VMs. They are also much faster to start and stop.
+
+![](images/docker-3.png)
 
 ### Docker vs Kubernetes
 
