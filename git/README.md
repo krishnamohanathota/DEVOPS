@@ -45,10 +45,17 @@ Untracked files:
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-```
+### git add (stage a file)
+
+- To add files to the index (i.e., “staging” files)
+- To add files to the staging area
+
+```bash
 git add README.md
 git add git
 ```
+
+- “README.md” file & "git" folder are now part of the staging area. It is a sort of “save point”; it isn’t yet part of the Git repository, but Git has saved a snapshot of the contents.
 
 ```bash
 git status
@@ -64,9 +71,10 @@ Changes to be committed:
 	new file:   git/images/git-status.png
 ```
 
-### git commit
+### git commit (i.e. “save points”)
 
-To commit changes to local repository
+- Commits (i.e., “save points”) are created based on what has been added to the index
+- To commit changes to local repository.
 
 ```bash
 git commit -m "GIT commands" --author="Krishna Mohan Athota <krishnamohan.athota@gmail.com>"
@@ -81,7 +89,16 @@ git commit -m "GIT commands" --author="Krishna Mohan Athota <krishnamohan.athota
 
 ### git push
 
-To push changes to remote repository
+To push changes to remote repository.
+
+git push <remote> <branch>
+
+<remote> - remote repository name.
+<branch> - branch name in remote repository
+
+````bash
+
+```bash
 
 ```bash
 git push origin main
@@ -95,4 +112,53 @@ Total 8 (delta 1), reused 0 (delta 0), pack-reused 0
 remote: Resolving deltas: 100% (1/1), completed with 1 local object.
 To https://github.com/krishnamohanathota/DEVOPS.git
    fab0045..eb3c81d  main -> main
-```
+````
+
+## git branching strategies
+
+Mainline development (Always be integrating)
+
+- Mainline development is the practice of maintaining a single code line (or branch) for a product.
+- Stage, Release and feature branches
+
+This all depends on the size of the team, the size of the project, and the complexity of the project.
+
+![](images/git-branching-strategy1.png)
+
+![](images/git-branching-strategy2.png)
+
+### Types of Branches
+
+- Long lived branches
+
+  ```
+  - Atleast one long lived branch is required for any project
+  - Exist throughout the lifetime of a project
+  - No direct commits to these branches
+  - Commits only through pull requests. This is to ensure that the code is reviewed by atleast one person. Quality of the code is maintained.
+  ```
+
+  - master (Mainline branch)
+  - develop
+  - staging
+
+- Short lived branches
+
+  ```
+  - Created from long lived branches
+  - Exist only for a short period of time
+  - Created for certain specific purpose and deleted after the purpose is served
+  - Direct commits are allowed
+  - Merged back to long lived branches
+  - Deleted after merging
+
+  - Feature branches
+  - Release branches
+  - Hotfix branches
+  - Experimental branches
+  - Bugfix branches
+  ```
+
+  - feature
+  - release
+  - hotfix
