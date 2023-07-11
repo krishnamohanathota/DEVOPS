@@ -25,8 +25,11 @@ git init
 
 ### git status
 
+To check the status of the repository
+
 ```bash
 git status
+
 On branch main
 Your branch is up to date with 'origin/main'.
 
@@ -47,10 +50,9 @@ git add README.md
 git add git
 ```
 
-````bash
-
 ```bash
 git status
+
 On branch main
 Your branch is up to date with 'origin/main'.
 
@@ -60,4 +62,37 @@ Changes to be committed:
 	new file:   git/README.md
 	new file:   git/images/git-folder.png
 	new file:   git/images/git-status.png
-````
+```
+
+### git commit
+
+To commit changes to local repository
+
+```bash
+git commit -m "GIT commands" --author="Krishna Mohan Athota <krishnamohan.athota@gmail.com>"
+
+[main eb3c81d] GIT commands
+ Author: Krishna Mohan Athota <krishnamohan.athota@gmail.com>
+ 4 files changed, 77 insertions(+)
+ create mode 100644 git/README.md
+ create mode 100644 git/images/git-folder.png
+ create mode 100644 git/images/git-status.png
+```
+
+### git push
+
+To push changes to remote repository
+
+```bash
+git push origin main
+
+Enumerating objects: 10, done.
+Counting objects: 100% (10/10), done.
+Delta compression using up to 10 threads
+Compressing objects: 100% (8/8), done.
+Writing objects: 100% (8/8), 457.73 KiB | 38.14 MiB/s, done.
+Total 8 (delta 1), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/krishnamohanathota/DEVOPS.git
+   fab0045..eb3c81d  main -> main
+```
