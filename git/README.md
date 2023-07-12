@@ -23,6 +23,70 @@ This command creates an empty Git repository - basically a .git directory with s
 git init
 ```
 
+### git clone
+
+To clone a repository into a newly created directory, use git clone with the URL of the repository you want to clone.
+
+```bash
+git clone <url>
+```
+
+How to clone a specific branch in git?
+
+```bash
+git clone -b <branch> <url>
+```
+
+or clone all branches
+
+```bash
+git clone --all <url>
+```
+
+Switch to a specific branch
+
+```bash
+git checkout <branch>
+```
+
+Create a new branch & switch to it
+
+```bash
+git checkout -b <branch>
+```
+
+Create a new branch
+
+```bash
+git branch <branch>
+```
+
+### git remote
+
+To view the short names, such as “origin,” of all specified remote handles.
+
+```bash
+git remote -v
+```
+
+output
+
+```bash
+origin	https://github.com/krishnamohanathota/DEVOPS.git (fetch)
+origin	https://github.com/krishnamohanathota/DEVOPS.git (push)
+```
+
+What is origin?
+
+### git config
+
+To configure the author name and email address to be used with your commits.
+
+```bash
+git config --global user.name "Krishna Mohan Athota"
+git config --global user.email "test@gmail.com"
+```
+
 ### git status
 
 To check the status of the repository
@@ -96,10 +160,6 @@ git push <remote> <branch>
 <remote> - remote repository name.
 <branch> - branch name in remote repository
 
-````bash
-
-```bash
-
 ```bash
 git push origin main
 
@@ -112,7 +172,7 @@ Total 8 (delta 1), reused 0 (delta 0), pack-reused 0
 remote: Resolving deltas: 100% (1/1), completed with 1 local object.
 To https://github.com/krishnamohanathota/DEVOPS.git
    fab0045..eb3c81d  main -> main
-````
+```
 
 ## git branching strategies
 
@@ -162,3 +222,70 @@ This all depends on the size of the team, the size of the project, and the compl
   - feature
   - release
   - hotfix
+
+### Pull Requests (GITGUB)
+
+- Pull requests are a feature that makes it easier for developers to collaborate using GitHub.
+- Pull requests let you tell others about changes you've pushed to a branch in a repository on GitHub.
+- Once a pull request is opened, you can discuss and review the potential changes with collaborators and add follow-up commits before your changes are merged into the base branch.
+
+### Merge Requests (GITLAB)
+
+- Merge requests are a feature that makes it easier for developers to collaborate using `GitLab`.
+- Merge requests let you tell others about changes you've pushed to a branch in a repository on `GitLab`.
+- Once a merge request is opened, you can discuss and review the potential changes with collaborators and add follow-up commits before your changes are merged into the base branch.
+
+### Pull Request (Merge Requests) Process
+
+- Create a branch from the long lived branch
+- Make changes to the code
+- Commit the changes to the branch
+- Create a pull request
+- Review the code
+- Merge the pull request
+- Delete the branch
+
+**_NOTE_** : Pull requests are always for branches, not for individual commits.
+
+### Merge Conflicts
+
+- When Integrating the code from one branch to another branch, if there are any conflicts in the code, then we need to resolve the conflicts manually.
+
+- A merge conflict is an event that occurs when Git is unable to automatically resolve differences in code between two commits.
+
+- When all the changes in the code are in different lines, Git can automatically merge the code.
+
+- When the changes are in the `same line`, Git cannot automatically merge the code. This is called a merge conflict.
+
+- Merge conflicts can be resolved by the developer.
+
+- Merge conflicts can be resolved by the developer by editing the code in the file manually.
+
+```bash
+$ git merge develop
+CONFLICT (content): Merge conflict in index.html
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+You can see that I ran into a conflict here and that Git tells me about the problem right away. Even if I had missed that message, I am reminded about the conflict the next time I type `git status`.
+
+![](images/git-merge-conflicts.png)
+
+How merge conflicts looks like in the code ?
+
+```html
+<<<<<<< HEAD
+<h1>My Website</h1>
+=======
+<h1>My Portfolio</h1>
+>>>>>>> develop
+```
+
+- The code between `<<<<<<< HEAD` and `=======` is the code that exists in the current branch (i.e. the branch that you are merging into).
+
+- The code between `=======` and `>>>>>>> develop` is the code that exists in the branch that you are merging in (i.e. the branch that you are merging from).
+
+git merge --abort
+
+- To abort the merge process and try again later.
+- This will try to reconstruct the pre-merge state of the code.
