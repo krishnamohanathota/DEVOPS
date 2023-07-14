@@ -109,6 +109,45 @@ Untracked files:
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
+### git log
+
+To view the commit history
+
+```bash
+git log
+
+commit 345ceadecbf2ec7b780345f822876629de44ac77 (HEAD -> main, origin/main, origin/HEAD)
+Author: Krishna Mohan Athota <xxx@gmail.com>
+Date:   Wed Jul 12 18:23:45 2023 +0530
+
+    GIT pull requests
+
+commit 01f1ecd3518a3ddb14c318af10a17ff42c3a624b
+Author: Krishna Mohan Athota <krishnamohan.athota@gmail.com>
+Date:   Tue Jul 11 22:00:47 2023 +0530
+
+    GIT branching strategies
+
+commit 9d533782b362dac576fad850b04e83909dad99f4
+Author: Krishna Mohan Athota <krishnamohan.athota@gmail.com>
+Date:   Tue Jul 11 21:20:44 2023 +0530
+
+    GIT commands
+
+commit eb3c81d390dab2a3bb9ec9e68a5ff2372659b03d
+Author: Krishna Mohan Athota <krishnamohan.athota@gmail.com>
+Date:   Tue Jul 11 21:16:19 2023 +0530
+
+    GIT commands
+
+commit fab0045e4ed0c11563842c64a19e1e15b44ca0fc
+Author: Krishna Mohan Athota <krishnamohan.athota@gmail.com>
+Date:   Mon Jul 10 18:55:27 2023 +0530
+
+    Forward Proxy and Reverse Proxy
+
+```
+
 ### git add (stage a file)
 
 - To add files to the index (i.e., “staging” files)
