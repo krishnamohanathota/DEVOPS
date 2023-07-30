@@ -462,7 +462,19 @@ The `ldconfig` command updates the dynamic linker/loader cache, which is respons
 
 ### Docker vs Virtual Machines
 
-Docker containers are often compared to virtual machines (VMs), but they are actually quite different. A virtual machine is a virtualized operating system that runs on top of a physical hardware. A Docker container is a virtualized runtime environment that runs on top of an operating system. This means that Docker containers are much more lightweight than VMs. They are also much faster to start and stop.
+Docker containers are often compared to virtual machines (VMs), but they are actually quite different.
+
+- Virtual machine
+
+  - virtualized operating system that runs on top of a physical hardware.
+  - Hardware level virtualization
+  - Overhead of Guest OS on each VM
+
+- Docker container
+  - Virtualized runtime environment that runs on top of an operating system.
+  - OS Level virtualization
+  - No Guest OS required (Levearages the host OS)
+  - Docker containers are much more lightweight than VMs. They are also much faster to start and stop.
 
 ![](images/docker-3.png)
 
