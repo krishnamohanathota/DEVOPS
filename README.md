@@ -33,3 +33,5 @@ A `reverse proxy` is a server that accepts a request from the client, forwards t
 ## GIT
 
 [git commands](git/README.md)
+
+[How to maintain multiple git accounts on a single machine](git/multiple_git_accounts.md)
