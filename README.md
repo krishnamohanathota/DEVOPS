@@ -30,6 +30,8 @@ A `reverse proxy` is a server that accepts a request from the client, forwards t
 
 ![](images/proxy.png)
 
+![](images/FW-Proxy-Vs-Reverse-Proxy.gif)
+
 ## GIT
 
 [git commands](git/README.md)
