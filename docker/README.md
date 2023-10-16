@@ -310,6 +310,8 @@ If you change the source code in server.js and rebuild the image, Docker will on
 
 In general, you need to order your layers from least likely to change to most likely to change in order to optimize the image size for pushing and pulling.
 
+![](images/docker-commands.gif)
+
 ---
 
 ### Instructions in Dockerfile
