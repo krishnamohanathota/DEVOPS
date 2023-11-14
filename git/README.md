@@ -76,8 +76,6 @@ origin	https://github.com/krishnamohanathota/DEVOPS.git (fetch)
 origin	https://github.com/krishnamohanathota/DEVOPS.git (push)
 ```
 
-What is origin?
-
 ### git config
 
 To configure the author name and email address to be used with your commits.
@@ -89,7 +87,7 @@ git config --global user.email "test@gmail.com"
 
 ### git status
 
-To check the status of the repository
+To check the status of the repository. i.e. to check the state between the `repository` and the `working directory`
 
 ```bash
 git status
@@ -148,6 +146,75 @@ Date:   Mon Jul 10 18:55:27 2023 +0530
 
 ```
 
+```bash
+git log --pretty=oneline
+
+345ceadecbf2ec7b780345f822876629de44ac77 (HEAD -> main, origin/main, origin/HEAD) GIT pull requests
+01f1ecd3518a3ddb14c318af10a17ff42c3a624b GIT branching strategies
+9d533782b362dac576fad850b04e83909dad99f4 GIT commands
+eb3c81d390dab2a3bb9ec9e68a5ff2372659b03d GIT commands
+fab0045e4ed0c11563842c64a19e1e15b44ca0fc Forward Proxy and Reverse Proxy
+```
+
+```bash
+git log --pretty=oneline --max-count=2
+git log --pretty=oneline --since='5 minutes ago'
+git log --pretty=oneline --until='5 minutes ago'
+git log --pretty=oneline --author=<your name>
+git log --pretty=oneline --all
+```
+
+```bash
+git log --all --pretty=format:'%h %cd %s (%an)' --since='7 days ago'
+
+345cea 2023-07-12 GIT pull requests (xxx)
+01f1ec 2023-07-11 GIT branching strategies (xxx)
+9d5337 2023-07-11 GIT commands (xxx)
+eb3c81 2023-07-11 GIT commands (xxx)
+fab004 2023-07-10 Forward Proxy and Reverse Proxy (xxx)
+```
+
+```bash
+git log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+
+* 345cea | GIT pull requests (xxx)
+* 01f1ec | GIT branching strategies (xxx)
+* 9d5337 | GIT commands (xxx)
+* eb3c81 | GIT commands (xxx)
+* fab004 | Forward Proxy and Reverse Proxy (xxx)
+```
+
+### Alias
+
+- To create an alias for a command
+
+```bash
+vi ~/.gitconfig
+
+[alias]
+  hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+  type = cat-file -t
+  dump = cat-file -p
+```
+
+```bash
+git hist
+
+* 345cea | 2023-07-12 | GIT pull requests (xxx)
+* 01f1ec | 2023-07-11 | GIT branching strategies (xxx)
+* 9d5337 | 2023-07-11 | GIT commands (xxx)
+* eb3c81 | 2023-07-11 | GIT commands (xxx)
+* fab004 | 2023-07-10 | Forward Proxy and Reverse Proxy (xxx)
+```
+
+### Undo local changes (i.e. “discard changes in working directory”)
+
+- To discard changes in working directory
+
+```bash
+git checkout -- README.md
+```
+
 ### git add (stage a file)
 
 - To add files to the index (i.e., “staging” files)
@@ -174,6 +241,18 @@ Changes to be committed:
 	new file:   git/images/git-status.png
 ```
 
+### git reset (unstage a file)
+
+The reset command resets the staging area to be whatever is in HEAD. This clears the staging area of the change we just staged.
+
+```bash
+git reset HEAD README.md
+
+Unstaged changes after reset:
+
+M	README.md
+```
+
 ### git commit (i.e. “save points”)
 
 - Commits (i.e., “save points”) are created based on what has been added to the index
@@ -188,6 +267,50 @@ git commit -m "GIT commands" --author="Krishna Mohan Athota <krishnamohan.athota
  create mode 100644 git/README.md
  create mode 100644 git/images/git-folder.png
  create mode 100644 git/images/git-status.png
+```
+
+### To update the last commit message
+
+```bash
+git commit --amend -m "GIT commands"
+```
+
+```bash
+git add README.md
+git commit --amend -m "GIT commands"
+```
+
+Here `Readme.md` file is added to the staging area and then the last commit message is updated.
+This means that the last commit message is updated with the new changes.
+
+### Reverse a commit (revert)
+
+- To reverse a commit
+
+```bash
+git revert HEAD
+```
+
+Since we were undoing the very last commit we made, we were able to use `HEAD` as the argument to revert. We can revert any arbitrary commit earlier in history by simply specifying its `hash value`.
+
+```bash
+git revert <commit-hash>
+```
+
+```bash
+git revert HEAD --no-edit
+```
+
+Problem with `git revert` is that it creates a new commit. If you want to undo a commit and pretend it never happened, then you should use `git reset` instead.
+
+### git reset (i.e. “undo commits”)
+
+- To undo commits
+
+```bash
+
+git reset --hard HEAD~1
+
 ```
 
 ### git push
@@ -212,6 +335,59 @@ remote: Resolving deltas: 100% (1/1), completed with 1 local object.
 To https://github.com/krishnamohanathota/DEVOPS.git
    fab0045..eb3c81d  main -> main
 ```
+
+### git pull (i.e. “get latest changes”)
+
+To get latest changes from remote repository.
+
+```bash
+
+git pull origin main
+
+* branch            main       -> FETCH_HEAD
+   fab0045..eb3c81d  main       -> origin/main
+Updating fab0045..eb3c81d
+Fast-forward
+ README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+```
+
+origin - remote repository name. (origin is the default name for the remote repository). `git remote -v` to view the remote repository names.
+
+main - branch name in remote repository
+
+### git fetch
+
+To get latest changes from remote repository.
+
+```bash
+
+git fetch origin main
+
+From
+* branch            main       -> FETCH_HEAD
+```
+
+### git pull vs git fetch
+
+- git pull = git fetch + git merge
+
+![](images/git-pull-fetch.gif)
+![](images/git-pull-fetch1.png)
+
+### What is origin?
+
+- origin is the default name for the remote repository.
+
+- git remote -v to view the remote repository names.
+
+### What is origin/master?
+
+- origin/master is the name of the local copy of the master branch of the remote repository named origin.
+
+- origin/master is not a branch. It is a local copy of a remote branch.
+
+### Rebasing
 
 ## git branching strategies
 
@@ -328,3 +504,11 @@ git merge --abort
 
 - To abort the merge process and try again later.
 - This will try to reconstruct the pre-merge state of the code.
+
+## References
+
+https://gitimmersion.com/index.html
+
+[Git Internals - How Git Works - Fear Not The SHA!](https://www.youtube.com/watch?v=P6jD966jzlk)
+
+[The Git Merge Handbook](https://www.freecodecamp.org/news/the-definitive-guide-to-git-merge)
