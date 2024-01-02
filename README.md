@@ -22,6 +22,12 @@ A Docker container image is a lightweight, standalone, executable package of sof
 
 ### Kubernetes
 
+Kubernates is a tool for automated management of containerized applications, also known as container orchestration tool.
+
+The name Kubernetes originates from Greek, meaning helmsman or pilot. K8s as an abbreviation results from counting the eight letters between the "K" and the "s".
+
+Kubernates(K8s) is all about managing the containers
+
 ## Forward Proxy & Reverse Proxy
 
 A `forward proxy` is a server that sits between user devices and the internet
@@ -37,3 +43,18 @@ A `reverse proxy` is a server that accepts a request from the client, forwards t
 [git commands](git/README.md)
 
 [How to maintain multiple git accounts on a single machine](git/multiple_git_accounts.md)
+
+### SSS Keys 
+
+- To list the fingerprints of all identities currently represented by the SSH agent.
+
+```bash
+ssh-add -l
+```
+
+- To add a new SSH key to the ssh-agent
+
+```bash
+ssh-add ~/.ssh/id_rsa
+```
+
