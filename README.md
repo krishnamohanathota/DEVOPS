@@ -58,3 +58,26 @@ ssh-add -l
 ssh-add ~/.ssh/id_rsa
 ```
 
+### GITHUB Personal Access Token
+
+This new type of token gives developers and resource owners more control and visibility around token access.
+
+These new tokens offer many more permissions to choose from, must be scoped to a specific organization or account, and must expire.
+
+https://github.blog/changelog/2022-10-18-introducing-fine-grained-personal-access-tokens/
+
+New Token creartion link:
+https://github.com/settings/personal-access-tokens/new
+
+Once personal access token is created, 
+- give code commit access to the token.
+![](images/github-commit.png)
+
+- use it as password while pushing the code to github.
+
+git remote set-url origin https://username:github_pat_11111111dfdfdfsdsdsds@github.com/username/TEST.git
+
+git remote -v
+
+NOTE : GITHUB personal token starts with `github_pat_`
+
