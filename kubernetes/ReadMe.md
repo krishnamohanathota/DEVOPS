@@ -1,10 +1,10 @@
-## Kubernates
+## Kubernetes
 
-Kubernates is a tool for automated management of containerized applications, also known as container orchestration tool.
+Kubernetes is a tool for automated management of containerized applications, also known as container orchestration tool.
 
 The name Kubernetes originates from Greek, meaning helmsman or pilot. K8s as an abbreviation results from counting the eight letters between the "K" and the "s".
 
-Kubernates(K8s) is all about managing the containers.
+Kubernetes(K8s) is all about managing the containers.
 
 <details>
 <summary><i>Why you need Kubernetes and what it can do ?</i></summary>
@@ -21,7 +21,7 @@ Kubernetes provides you with a framework to run distributed systems resiliently.
 
 For example, Kubernetes can easily manage a `canary deployment` for your system. (`canary deployment` refers to a specific deployment strategy in software development and release management. In a canary deployment, a new version of a software application is rolled out to a small subset of users or servers first, before being gradually expanded to a larger audience. This approach is used to test the new version's stability and performance in a real-world environment, and to detect and address any issues or bugs before they affect the entire user base.)
 
-Kubernates makes deploying your containers, monitoring your applications automatically across multiple servers, and scaling your application as simple as a single command. 
+Kubernetes makes deploying your containers, monitoring your applications automatically across multiple servers, and scaling your application as simple as a single command. 
 
 </details>
 
@@ -105,13 +105,13 @@ Kubernetes doesn’t treat its pods as unique, long-running instances; if a pod 
 
 pod executes the containers in it. i.e. just running the `docker run` command.
 
-## Kubernates Cluster
+## Kubernetes Cluster
 
 A cluster is all of the above components put together as a single unit.
 
 ![](images/Kubernetes_architecture1.webp)
 
-## kubectl (Kubernates CLI)
+## kubectl (Kubernetes CLI)
 
 kubectl is a command-line tool that allows you to run commands against Kubernetes clusters. You can use kubectl to deploy applications, inspect and manage cluster resources, and view logs.
 
@@ -120,12 +120,12 @@ kubectl is a command-line tool that allows you to run commands against Kubernete
 </details>
 
 <details>
-<summary><i>What you need to do vs Kubernates will do</i></summary>
+<summary><i>What you need to do vs Kubernetes will do</i></summary>
 
-| What you need to do | What Kubernates will do |
+| What you need to do | What Kubernetes will do |
 | --- | --- |
 | Creates Cluster & Node Instances (Worker + Master Noes) | Create your Objects (pods) and manage them |
-| Setup API Server, Kubelet and other Kubernates services / Software on Nodes | Monitor pods and re-create them, Scale pods etc|
+| Setup API Server, Kubelet and other Kubernetes services / Software on Nodes | Monitor pods and re-create them, Scale pods etc|
 | Create other (cloud) resources like Load Balancer, Storage etc | Utlizes the provided (cloud) resources to apply your configuration / goals |
 
 </details>
@@ -224,6 +224,161 @@ minikube dashboard
 🎉  Opening http://127.0.0.1:62368/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/ in your default browser...
 
 ```
+
+</details>
+
+
+<details>
+<summary><i>Deployment</i></summary>
+
+- A `deployment` is a Kubernetes `object` that defines how to create and update instances of your application.
+
+## POD Object
+
+A `pod` is a Kubernetes `object` that represents a group of one or more application containers (such as Docker or rkt), and some shared resources for those containers. Those resources include:
+
+  - Shared storage, as Volumes
+  - Networking, as a unique cluster IP address
+  - Information about how to run each container, such as the container image version or specific ports to use
+  - A pod is the basic building block of Kubernetes–the smallest and simplest unit in the Kubernetes object model that you create or deploy. A pod represents a running process on your cluster.
+
+![](images/kubectl-pod-object.png)
+
+## Deployment Object
+
+A `deployment` is a Kubernetes `object` that defines how to create and update instances of your application. Once you’ve created a deployment, the Kubernetes master schedules mentioned application instances onto individual Nodes in the cluster. Once the application instances are created, a Kubernetes Deployment Controller continuously monitors those instances. If the Node hosting an instance goes down or is deleted, the Deployment controller replaces the instance with an instance on another Node in the cluster. This provides a self-healing mechanism to address machine failure or maintenance.
+
+![](images/kubectl-deployment-object.png)
+
+## STEP #1: Create a simple Docker image
+
+[Simple NodeJS Docker Application](./sample-nodejs-app/Readme.md)
+
+## STEP #2: Create a Deployment
+
+```
+docker images
+REPOSITORY                                                                  TAG         IMAGE ID       CREATED          SIZE
+nodejs-app                                                                  latest      f9d5cd5a0171   26 minutes ago   861MB
+
+kubectl create deployment first-app --image=nodejs-app
+
+deployment.apps/first-app created
+```
+
+```
+kubectl get deployments 
+NAME        READY   UP-TO-DATE   AVAILABLE   AGE
+first-app   0/1     1            0           3m13s
+
+kubectl get pods
+NAME                         READY   STATUS             RESTARTS   AGE
+first-app-7748f564d4-fx6fs   0/1     ImagePullBackOff   0          3m39s
+```
+
+kubectl was unable to find the image locally, so it tried to download the image from a remote repository. However, the image was not found in the remote repository either, so the pod is stuck in the ImagePullBackOff state.
+
+```
+kubectl delete deployment first-app
+
+deployment.apps "first-app" deleted
+```
+
+## STEP #3: Push Docker Image to Docker Hub
+
+```
+docker login
+
+docker tag nodejs-app <docker-hub-username>/nodejs-app
+
+docker push <docker-hub-username>/nodejs-app
+```
+
+## STEP #4: Create a Deployment with a valid image
+
+``` 
+kubectl create deployment first-app --image=<docker-hub-username>/nodejs-app
+
+kubectl get pods
+NAME                         READY   STATUS              RESTARTS   AGE
+first-app-675d7b94f6-zhfq2   0/1     ContainerCreating   0          4s
+
+kubectl get pods
+NAME                         READY   STATUS    RESTARTS   AGE
+first-app-675d7b94f6-zhfq2   1/1     Running   0          29s
+
+kubectl get deployments 
+NAME        READY   UP-TO-DATE   AVAILABLE   AGE
+first-app   1/1     1            1           92s
+```
+
+```
+minikube dashboard
+```
+
+![](images/kubectl-create.png)
+
+## Service Object
+
+A `service` is a Kubernetes `object` that exposes an application running on a set of Pods as a network service.
+
+![](images/kubectl-service-object.png)
+
+## STEP #5: Create a Service (Expose a deployment with a service)
+
+```
+kubectl get services
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   97d
+```
+
+Above `kubernetes` service is created by default when you create a cluster. It is used by the internal components of Kubernetes, and is not meant to be used by applications running on the cluster.
+
+
+```
+kubectl expose deployment first-app --type=LoadBalancer --port=8181
+
+service/first-app exposed
+```
+
+```
+kubectl get services
+
+NAME         TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+first-app    LoadBalancer   10.109.121.166   <pending>     8181:32446/TCP   15s
+kubernetes   ClusterIP      10.96.0.1        <none>        443/TCP          97d
+
+```
+
+If we would have created the cluster on a cloud provider like AWS, Azure, GCP etc, then the `EXTERNAL-IP` would have been assigned by the cloud provider. Since we are using `minikube`, EXTENAL-IP is always `<pending>`.
+
+```
+minikube service first-app
+
+
+|-----------|---------------|-------------|---------------------------|
+| NAMESPACE |     NAME      | TARGET PORT |            URL            |
+|-----------|---------------|-------------|---------------------------|
+| default   | first-app |        8181     | http://192.168.49.2:32446 |
+|-----------|---------------|-------------|---------------------------|
+🏃  Starting tunnel for service first-app-new.
+|-----------|---------------|-------------|------------------------|
+| NAMESPACE |     NAME      | TARGET PORT |          URL           |
+|-----------|---------------|-------------|------------------------|
+| default   | first-app     |             | http://127.0.0.1:49421 |
+|-----------|---------------|-------------|------------------------|
+🎉  Opening service default/first-app-new in default browser...
+❗  Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
+
+```
+
+Browser will open with the URL `http://127.0.0.1:49421/` and you will see the output of the application.
+
+- When you expose a deployment with the LoadBalancer type, Minikube simulates the behavior of an external load balancer. However, since Minikube runs on a local environment, it doesn't have access to external load balancers.
+
+- Minikube starts a `tunnel` to expose the specified service to your local machine. The tunnel allows you to access the service as if it were running locally on your computer. This is especially useful when working with `services of type LoadBalancer` in a Minikube environment.
+
+- Keep in mind that this behavior is specific to Minikube, and in a production environment, you would typically have an external load balancer handling the traffic to services of type LoadBalancer.
 
 </details>
 
