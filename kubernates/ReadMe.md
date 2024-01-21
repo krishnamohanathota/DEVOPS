@@ -131,6 +131,101 @@ kubectl is a command-line tool that allows you to run commands against Kubernete
 </details>
 
 
+<details>
+<summary><i>Installation</i></summary>
+
+## Install kubectl
+
+https://kubernetes.io/docs/tasks/tools/
+
+</details>
+
+
+<details>
+<summary><i>Commands</i></summary>
+
+```
+kubectl version --client
+
+Client Version: v1.29.1
+Kustomize Version: v5.0.4-0.20230601165947-6ce0bf390ce3
+```
+
+**`minikube start` (i.e. Minikube with the Docker driver)**
+
+-  It initializes and starts a single-node Kubernetes cluster.
+-  Minikube can use various virtualization drivers such as VirtualBox, VMware, HyperKit, KVM, etc., to create a virtual machine (VM) that will host the Kubernetes cluster. If a VM is used, minikube start will create and configure the VM to run the Kubernetes components.
+-  By default, Minikube uses the Docker driver. If you have Docker installed and running, you can use it to start Minikube.
+-  With the Docker `driver`, Minikube provides a lightweight way to run a local Kubernetes cluster by leveraging Docker containers.
+-  Pull Kubernetes Images: Minikube pulls the necessary Docker images for the specific version of Kubernetes that you are running. These images include the control plane components (API server, controller manager, scheduler) and other components required for running a Kubernetes cluster.
+-  Containerized Kubernetes Components: when using Minikube with the Docker driver, the Kubernetes components (control plane and node) run within Docker containers, but not necessarily as separate containers for each component. Instead, the components run as processes within the same Docker containers. This setup is more compact and suitable for local development environments.
+-  Networking Configuration: Minikube configures the networking for the cluster, ensuring that the containers can communicate with each other. It sets up a local DNS to enable service discovery within the cluster.
+-  Kubeconfig Configuration: Minikube updates your kubectl configuration (kubeconfig) to point to the newly created cluster. This ensures that when you run kubectl commands, they interact with the local Minikube cluster.
+
+**NOTE**
+- Before running the above command, make sure `docker` is running.
+  
+```
+minikube start
+
+😄  minikube v1.26.0 on Darwin 13.4.1 (arm64)
+✨  Using the docker driver based on existing profile
+👍  Starting control plane node minikube in cluster minikube
+🚜  Pulling base image ...
+🔄  Restarting existing docker container for "minikube" ...
+🐳  Preparing Kubernetes v1.24.1 on Docker 20.10.17 ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+
+❗  /usr/local/bin/kubectl is version 1.29.1, which may have incompatibilites with Kubernetes 1.24.1.
+    ▪ Want kubectl v1.24.1? Try 'minikube kubectl -- get pods -A'
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+
+```
+
+```
+docker ps
+
+CONTAINER ID   IMAGE                                 COMMAND                  CREATED        STATUS         PORTS                                                                                                                        NAMES
+329a3d2451de   gcr.io/k8s-minikube/kicbase:v0.0.32   "/usr/local/bin/entr…"   3 months ago   Up 2 minutes   0.0.0.0:59487->22/tcp, 0.0.0.0:59490->2376/tcp, 0.0.0.0:59492->5000/tcp, 0.0.0.0:59493->8443/tcp, 0.0.0.0:59491->32443/tcp   minikube
+
+```
+
+```
+kubectl cluster-info
+
+Kubernetes control plane is running at https://127.0.0.1:59493
+CoreDNS is running at https://127.0.0.1:59493/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+```
+
+
+```
+minikube status
+
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+```
+
+```
+minikube dashboard
+🔌  Enabling dashboard ...
+    ▪ Using image kubernetesui/dashboard:v2.6.0
+    ▪ Using image kubernetesui/metrics-scraper:v1.0.8
+🤔  Verifying dashboard health ...
+🚀  Launching proxy ...
+🤔  Verifying proxy health ...
+🎉  Opening http://127.0.0.1:62368/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/ in your default browser...
+
+```
+
+</details>
 
 <details>
 <summary><i>References</i></summary>
