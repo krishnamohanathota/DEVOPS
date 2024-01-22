@@ -250,6 +250,14 @@ A `deployment` is a Kubernetes `object` that defines how to create and update in
 
 ![](images/kubectl-deployment-object.png)
 
+</details>
+
+<details>
+<summary><i>Deployment - Imperative</i></summary>
+
+<details>
+<summary><i>Deployment - Create</i></summary>
+
 ## STEP #1: Create a simple Docker image
 
 [Simple NodeJS Docker Application](./sample-nodejs-app/Readme.md)
@@ -380,6 +388,203 @@ Browser will open with the URL `http://127.0.0.1:49421/` and you will see the ou
 
 - Keep in mind that this behavior is specific to Minikube, and in a production environment, you would typically have an external load balancer handling the traffic to services of type LoadBalancer.
 
+## STEP #6: Scale the application
+
+```
+kubectl scale deployment first-app --replicas=3
+
+deployment.apps/first-app scaled
+```
+
+```
+kubectl get pods
+NAME                         READY   STATUS    RESTARTS      AGE
+first-app-675d7b94f6-nwkf8   1/1     Running   0             11s
+first-app-675d7b94f6-vwzw5   1/1     Running   0             11s
+first-app-675d7b94f6-zhfq2   1/1     Running   3 (16m ago)   4h57m
+```
+
+
+</details>
+
+<details>
+<summary><i>Deployment - Update</i></summary>
+
+## STEP #1: Update the application
+
+```
+docker build -t <docker-hub-username>/nodejs-app .
+
+docker push <docker-hub-username>/nodejs-app
+```
+
+## STEP #2: Update the deployment
+
+```
+kubectl set image deployment/first-app nodejs-app=<docker-hub-username>/nodejs-app
+
+deployment.apps/first-app image updated
+```
+
+- kubectl set image: This is the main command to set the image of a container in a Kubernetes Deployment or ReplicaSet.
+
+- deployment/first-app: Specifies the resource type (Deployment) and the name of the deployment, in this case, "first-app." This indicates which deployment should be updated.
+
+- nodejs-app=<docker-hub-username>/nodejs-app: This part specifies the name of the container (nodejs-app) in the deployment that you want to update and the new image to use. Replace <docker-hub-username> with your actual Docker Hub username.
+
+### How to get correct container name in the pod?
+
+```
+kubectl get pods first-app-585c76f569-frghx -o jsonpath='{.spec.containers[*].name}'
+
+nodejs-app
+```
+
+we can see see the same on the dashboard as well.
+
+![](images/k8s-dashboard-pods-container.png)
+
+**NOTE:**
+- Here It won't work if you use the same image name. You need to use a different image name. Otherwise, Kubernetes will not detect any changes and will not update the deployment.
+- Hence, we have used the same image name with a different tag.
+
+```
+docker build -t <docker-hub-username>/nodejs-app:v2 .
+
+docker push <docker-hub-username>/nodejs-app:v2
+```
+
+```
+kubectl set image deployment/first-app nodejs-app=<docker-hub-username>/nodejs-app:v2
+
+deployment.apps/first-app image updated
+```
+
+Monitor the rollout status
+
+```
+kubectl rollout status deployment/first-app
+
+deployment "first-app" successfully rolled out
+```
+
+</details>
+
+<details>
+<summary><i>Deployment - Rollback</i></summary>
+
+## STEP #1: Update the application with a WRONG image
+
+```
+kubectl set image deployment/first-app nodejs-app=kmathotatech/nodejs-app:2
+
+deployment.apps/first-app image updated
+```
+
+```
+kubectl rollout status deployment/first-app
+
+Waiting for deployment "first-app" rollout to finish: 1 old replicas are pending termination...
+```
+
+Here deployment is failed as it was not able to pull the image.
+
+
+```
+kubectl get pods
+
+NAME                         READY   STATUS             RESTARTS      AGE
+first-app-585c76f569-frghx   1/1     Running            1 (31m ago)   20h
+first-app-5b47c6867b-g5cvm   0/1     ImagePullBackOff   0             4m17s
+```
+
+## STEP#2  : Rollback the deployment
+
+```
+kubectl rollout undo deployment/first-app
+
+deployment.apps/first-app rolled back
+```
+
+```
+kubectl get pods
+
+NAME                         READY   STATUS    RESTARTS      AGE
+first-app-585c76f569-frghx   1/1     Running   1 (36m ago)   20h
+```
+
+```
+kubectl rollout status deployment/first-app
+
+deployment "first-app" successfully rolled out
+```
+
+## STEP#3 : Rollback to a specific revision
+
+```
+kubectl rollout history deployment/first-app
+
+deployment.apps/first-app 
+REVISION  CHANGE-CAUSE
+1         <none>
+3         <none>
+4         <none>
+```
+
+```
+kubectl rollout history deployment/first-app --revision=1
+
+deployment.apps/first-app with revision #1
+Pod Template:
+  Labels:	app=first-app
+	pod-template-hash=675d7b94f6
+  Containers:
+   nodejs-app:
+    Image:	kmathotatech/nodejs-app
+    Port:	<none>
+    Host Port:	<none>
+    Environment:	<none>
+    Mounts:	<none>
+  Volumes:	<none>
+```
+
+## STEP$4 : Rollback to a specific revision
+
+```
+kubectl rollout undo deployment/first-app --to-revision=1
+
+deployment.apps/first-app rolled back
+```
+
+</details>
+
+<details>
+<summary><i>Deployment - Delete</i></summary>
+
+## STEP #1: Delete the service
+
+```
+kubectl delete service first-app
+
+service "first-app" deleted
+```
+
+```
+kubectl get services 
+
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   98d
+```
+
+## STEP #2: Delete the deployment
+```
+kubectl delete deployment first-app
+
+deployment.apps "first-app" deleted
+```
+
+</details>
+
 </details>
 
 <details>
@@ -390,3 +595,4 @@ Kubernetes Tutorials
 https://www.aquasec.com/cloud-native-academy/kubernetes-101/kubernetes-tutorials-2/
 
 </details>
+
