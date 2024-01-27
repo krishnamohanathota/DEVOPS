@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    anyname: second-app
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8181
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: second-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      key: value
+      anyname: second-app
+      custom1: value
+      app: second-nodejs-app
+  template:
+    metadata:
+      labels:
+        key: value
+        anyname: second-app
+        custom1: value
+        app: second-nodejs-app
+    spec:
+      containers:
+        - name: second-nodejs-app
+          image: kmathotatech/nodejs-app:2

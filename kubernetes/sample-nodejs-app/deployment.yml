@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: second-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      key: value
+      anyname: second-app
+      custom1: value
+      app: second-nodejs-app
+  template:
+    metadata:
+      labels:
+        key: value
+        anyname: second-app
+        custom1: value
+        app: second-nodejs-app
+    spec:
+      containers:
+        - name: second-nodejs-app
+          image: kmathotatech/nodejs-app:1
+          #ports:
+          #  - containerPort: 8080
+        #- name: second-nodejs-app2
+        #   image: kmathotatech/nodejs-app2:1
+        #   ports:
+        #     - containerPort: 8081

@@ -5,7 +5,7 @@ const app = express();
 app.get("/", (req, res) => {
   res.send(`
     <h1> Hello from this node js App!!</h1>
-    <p> New Version 1.0 </p>
+    <p> New Version 2.0 : Declarative  </p>
     <p> try sending the request to /error and see what happens</P>
   `);
 });
