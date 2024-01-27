@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: second-nodejs-app
-          image: kmathotatech/nodejs-app:1
+          image: test/nodejs-app:1
           #ports:
           #  - containerPort: 8080
         #- name: second-nodejs-app2

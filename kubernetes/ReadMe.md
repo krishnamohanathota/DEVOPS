@@ -63,7 +63,10 @@
       - [Delete the deployment and service](#delete-the-deployment-and-service)
       - [Single fle for deployment and service](#single-fle-for-deployment-and-service)
         - [deployment-master.yml](#deployment-masteryml)
-- [References](#references)
+  - [Probes](#probes)
+    - [Liveness Probe](#liveness-probe)
+    - [Readiness Probe](#readiness-probe)
+  - [References](#references)
 
 
 # Kubernetes
@@ -1014,9 +1017,142 @@ kubernetes        ClusterIP      10.96.0.1       <none>        443/TCP          
 </details>
 
 <details>
+<summary><i>Probes</i></summary>
+
+## Probes
+
+### Liveness Probe
+
+- The Liveness Probe checks whether a container is still running and healthy.
+- If the Liveness Probe fails, Kubernetes restarts the container to try to restore it to a healthy state.
+- The Liveness Probe is essential for ensuring that containers are continuously available and responsive.
+  
+### Readiness Probe
+
+- The Readiness Probe determines whether a container is ready to serve requests.
+- It helps Kubernetes determine when a container is ready to start accepting traffic.
+- If the Readiness Probe fails, Kubernetes removes the container's IP address from the endpoints of services and replication controllers, preventing it from receiving traffic.
+- The Readiness Probe ensures that only healthy containers receive requests, helping to maintain the overall stability and reliability of the application
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: second-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      key: value
+      anyname: second-app
+      custom1: value
+      app: second-nodejs-app
+  template:
+    metadata:
+      labels:
+        key: value
+        anyname: second-app
+        custom1: value
+        app: second-nodejs-app
+    spec:
+      containers:
+        - name: second-nodejs-app
+          image: kmathotatech/nodejs-app:1
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8181
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 3
+            successThreshold: 1
+```
+
+If liveless probe fails, then kubernetes will restart the container.
+
+```
+kubectl get pods
+
+NAME                                    READY   STATUS    RESTARTS     AGE
+second-app-deployment-fbc44dbc5-qzxxq   1/1     Running   5 (1s ago)   101s
+```
+
+```
+kubectl describe pod second-app-deployment-fbc44dbc5-qzxxq
+
+Name:             second-app-deployment-fbc44dbc5-qzxxq
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Sat, 27 Jan 2024 14:28:16 -0600
+Labels:           anyname=second-app
+                  app=second-nodejs-app
+                  custom1=value
+                  key=value
+                  pod-template-hash=fbc44dbc5
+Annotations:      <none>
+Status:           Running
+IP:               172.17.0.6
+IPs:
+  IP:           172.17.0.6
+Controlled By:  ReplicaSet/second-app-deployment-fbc44dbc5
+Containers:
+  second-nodejs-app:
+    Container ID:   docker://ba67b5b2beaa644898b2c710fd4ce6ceea8b0d89e7cd23e968a9d39b27fb1abd
+    Image:          kmathotatech/nodejs-app:1
+    Image ID:       docker-pullable://kmathotatech/nodejs-app@sha256:44cc18db1a16c78b49a643d684ab95f34622b615a332e40ab2c803cbf3a5030f
+    Port:           <none>
+    Host Port:      <none>
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Sat, 27 Jan 2024 14:30:06 -0600
+      Finished:     Sat, 27 Jan 2024 14:30:21 -0600
+    Ready:          False
+    Restart Count:  5
+    Liveness:       http-get http://:8181/health delay=5s timeout=1s period=5s #success=1 #failure=3
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-7x8q4 (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             False 
+  ContainersReady   False 
+  PodScheduled      True 
+Volumes:
+  kube-api-access-7x8q4:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                   From               Message
+  ----     ------     ----                  ----               -------
+  Normal   Scheduled  2m20s                 default-scheduler  Successfully assigned default/second-app-deployment-fbc44dbc5-qzxxq to minikube
+  Normal   Pulled     91s (x4 over 2m20s)   kubelet            Container image "kmathotatech/nodejs-app:1" already present on machine
+  Normal   Created    91s (x4 over 2m20s)   kubelet            Created container second-nodejs-app
+  Normal   Started    91s (x4 over 2m20s)   kubelet            Started container second-nodejs-app
+  Normal   Killing    91s (x3 over 2m1s)    kubelet            Container second-nodejs-app failed liveness probe, will be restarted
+  Warning  Unhealthy  86s (x10 over 2m11s)  kubelet            Liveness probe failed: HTTP probe failed with statuscode: 404
+
+```
+
+</details>
+
+<details>
 <summary><i>References</i></summary>
 
-# References
+## References
 
 Kubernetes Tutorials
 
