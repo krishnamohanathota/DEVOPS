@@ -30,7 +30,7 @@ Ansible uses a client-server architecture. The client is called the Ansible cont
 
 The Ansible control node is where you run Ansible commands. The Ansible managed node is where you run Ansible playbooks.
 
-Inventory is a list of hosts that Ansible can connect to. Inventory can be static or dynamic.
+Inventory is a list of hosts that Ansible can connect to. Inventory can be static or dynamic. `Node Server` and `Child` are other names for Inventory.
 
 ![](images/ansible-arch.png)
 
