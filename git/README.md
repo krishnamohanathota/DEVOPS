@@ -512,3 +512,5 @@ https://gitimmersion.com/index.html
 [Git Internals - How Git Works - Fear Not The SHA!](https://www.youtube.com/watch?v=P6jD966jzlk)
 
 [The Git Merge Handbook](https://www.freecodecamp.org/news/the-definitive-guide-to-git-merge)
+
+[Awesome Git](https://github.com/dictcp/awesome-git)
